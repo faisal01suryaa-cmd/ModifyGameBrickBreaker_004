@@ -187,3 +187,116 @@ def game_over(score):
 
                 if event.key == pygame.K_ESCAPE:
                     return False
+
+def main():
+    paddle = Paddle()
+    ball = Ball()
+    blocks = create_blocks()
+
+    score = 0
+    lives = 3
+    level = 1
+    running = True
+
+    while running:
+        screen.fill(BLACK)
+
+        # Event
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        # Kontrol
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_LEFT]:
+            paddle.move(-1)
+
+        if keys[pygame.K_RIGHT]:
+            paddle.move(1)
+
+        if keys[pygame.K_ESCAPE]:
+            running = False
+
+        # Gerakan bola
+        if ball.move():
+            lives -= 1
+            ball.reset()
+
+        # Collision paddle
+        if ball.get_rect().colliderect(paddle.rect):
+            if ball.dy > 0:
+                ball.dy *= -1
+
+        # Collision block
+        for block in blocks[:]:
+
+            if ball.get_rect().colliderect(block.rect):
+                ball.dy *= -1
+                block.health -= 1
+
+                if block.health <= 0:
+                    blocks.remove(block)
+                    score += 10
+
+                break
+
+        # Game over
+        if lives <= 0:
+
+            if game_over(score):
+                score = 0
+                lives = 3
+                level = 1
+                blocks = create_blocks()
+                ball.reset()
+
+            else:
+                running = False
+
+        # Level berikutnya
+        if len(blocks) == 0:
+            level += 1
+            blocks = create_blocks()
+            ball.reset()
+
+        # Gambar block
+        for block in blocks:
+            block.draw()
+
+        paddle.draw()
+        ball.draw()
+
+        # Score
+        score_text = font.render(
+            "Score: " + str(score),
+            True,
+            WHITE
+        )
+
+        # Lives
+        life_text = font.render(
+            "Lives: " + str(lives),
+            True,
+            PINK
+        )
+
+        # Level
+        level_text = font.render(
+            "Level: " + str(level),
+            True,
+            YELLOW
+        )
+
+        screen.blit(score_text, (20, 20))
+        screen.blit(life_text, (300, 20))
+        screen.blit(level_text, (590, 20))
+
+        pygame.display.update()
+        clock.tick(60)
+
+    pygame.quit()
+
+
+if __name__ == "__main__":
+    main()
