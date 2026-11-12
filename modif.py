@@ -20,3 +20,25 @@ PINK = (255, 80, 180)
 CYAN = (70, 240, 255)
 
 COLORS = [RED, GREEN, BLUE, YELLOW, PURPLE, PINK]
+
+class Paddle:
+    def __init__(self):
+        self.rect = pygame.Rect(290, 500, 120, 18)
+        self.speed = 8
+
+    def move(self, direction):
+        self.rect.x += direction * self.speed
+
+        if self.rect.left < 0:
+            self.rect.left = 0
+
+        if self.rect.right > WIDTH:
+            self.rect.right = WIDTH
+
+    def draw(self):
+        pygame.draw.rect(
+            screen,
+            CYAN,
+            self.rect,
+            border_radius=8
+        )
