@@ -148,3 +148,42 @@ def create_blocks():
             blocks.append(Block(x, y))
 
     return blocks
+
+def game_over(score):
+    while True:
+        screen.fill(BLACK)
+
+        text = font.render(
+            "GAME OVER - Score: " + str(score),
+            True,
+            RED
+        )
+
+        info = font.render(
+            "SPACE = Restart | ESC = Exit",
+            True,
+            WHITE
+        )
+
+        screen.blit(
+            text,
+            text.get_rect(center=(350, 240))
+        )
+
+        screen.blit(
+            info,
+            info.get_rect(center=(350, 290))
+        )
+
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    return True
+
+                if event.key == pygame.K_ESCAPE:
+                    return False
