@@ -84,3 +84,67 @@ class Ball:
             18,
             18
         )
+
+class Block:
+    def __init__(self, x, y):
+        self.rect = pygame.Rect(x, y, 60, 25)
+        self.color = random.choice(COLORS)
+
+        self.shape = random.choice([
+            "box",
+            "circle",
+            "diamond"
+        ])
+
+        self.health = random.choice([1, 1, 1, 2])
+
+    def draw(self):
+        if self.shape == "box":
+            pygame.draw.rect(
+                screen,
+                self.color,
+                self.rect,
+                border_radius=5
+            )
+
+        elif self.shape == "circle":
+            pygame.draw.ellipse(
+                screen,
+                self.color,
+                self.rect
+            )
+
+        else:
+            points = [
+                (self.rect.centerx, self.rect.top),
+                (self.rect.right, self.rect.centery),
+                (self.rect.centerx, self.rect.bottom),
+                (self.rect.left, self.rect.centery)
+            ]
+
+            pygame.draw.polygon(
+                screen,
+                self.color,
+                points
+            )
+
+        if self.health == 2:
+            pygame.draw.rect(
+                screen,
+                WHITE,
+                self.rect,
+                2
+            )
+
+
+def create_blocks():
+    blocks = []
+
+    for row in range(5):
+        for col in range(9):
+            x = 30 + col * 72
+            y = 70 + row * 40
+
+            blocks.append(Block(x, y))
+
+    return blocks
