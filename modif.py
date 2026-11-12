@@ -42,3 +42,45 @@ class Paddle:
             self.rect,
             border_radius=8
         )
+
+class Ball:
+    def __init__(self):
+        self.radius = 9
+        self.reset()
+
+    def reset(self):
+        self.x = WIDTH // 2
+        self.y = 450
+        self.dx = random.choice([-5, 5])
+        self.dy = -5
+
+    def move(self):
+        self.x += self.dx
+        self.y += self.dy
+
+        if self.x <= self.radius:
+            self.dx *= -1
+
+        if self.x >= WIDTH - self.radius:
+            self.dx *= -1
+
+        if self.y <= self.radius:
+            self.dy *= -1
+
+        return self.y > HEIGHT
+
+    def draw(self):
+        pygame.draw.circle(
+            screen,
+            WHITE,
+            (int(self.x), int(self.y)),
+            self.radius
+        )
+
+    def get_rect(self):
+        return pygame.Rect(
+            self.x - self.radius,
+            self.y - self.radius,
+            18,
+            18
+        )
